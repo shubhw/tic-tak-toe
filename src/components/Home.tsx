@@ -24,6 +24,14 @@ const Home = () => {
     }
     console.log("diagnonalCheckL ==>>", diagnonalCheckL);
     console.log("diagnonalCheckR ==>>", diagnonalCheckR);
+    if (
+      diagnonalCheckL.filter((item) => item === turn).length === 3 ||
+      diagnonalCheckR.filter((item) => item === turn).length === 3
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   //   const horizontalCheck = (newData: any) => {
@@ -39,20 +47,20 @@ const Home = () => {
       console.log("newData ==>>", newData);
       const diagnonalCheckValues = diagnonalCheck(newData);
       //   const horizontalCheckValues = horizontalCheck(newData);
-      resolve(false);
+      resolve(diagnonalCheckValues);
     });
   };
 
   const onCellClick = (boxKey: any, value: String) => {
-    if (!value) {
+    if (!value && win === "") {
       const newData: { [key: number]: String }[] = ticTacData;
       const row = boxKey.row;
       const cell = boxKey.cell;
       newData[row][cell] = turn;
       setTicTacData(newData);
 
-      getWinner(newData).then((win) => {
-        if (win) {
+      getWinner(newData).then((winer) => {
+        if (winer) {
           setWinner("Winner is " + turn);
         } else {
           setTurn((prev) => {
@@ -65,6 +73,7 @@ const Home = () => {
 
   const handleReset = () => {
     setTicTacData(defaultData);
+    setWinner("");
   };
 
   return (
@@ -101,6 +110,7 @@ const Home = () => {
             })}
           </tbody>
         </table>
+        <h2>{win}</h2>
       </div>
     </div>
   );
